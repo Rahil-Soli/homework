@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Stopwatch with Capture</title>
+  <style>
+    .container {
+      text-align: center;
+      margin-top: 100px;
+    }
+    .capture {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Stopwatch</h1>
+    <button onclick="start()">Start</button>
+    <button onclick="stop()">Stop</button>
+    <button onclick="capture()">Capture</button>
+    <button onclick="reset()">Reset</button>
+    <h2 id="timer">00:00:00</h2>
+    <div id="captures" class="capture"></div>
+  </div>
+
+  <script>
+    let seconds = 0;
+    let timerId;
+
+    function start() {
+      clearInterval(timerId);
+      timerId = setInterval(updateTime, 1000);
+    }
+
+    function stop() {
+      clearInterval(timerId);
+    }
+
+    function updateTime() {
+      seconds++;
+      document.getElementById("timer").textContent = formatTime(seconds);
+    }
+
+    function formatTime(timeInSeconds) {
+      let hours = Math.floor(timeInSeconds / 3600);
+      let minutes = Math.floor((timeInSeconds % 3600) / 60);
+      let seconds = Math.floor(timeInSeconds % 60);
+
+      return pad(hours) + ":" + pad(minutes) + ":" + pad(seconds);
+    }
+
+    function pad(value) {
+      return String(value).padStart(2, '0');
+    }
+
+    function capture() {
+      const captureTime = formatTime(seconds);
+      const captureElement = document.createElement("div");
+      captureElement.textContent = captureTime;
+
+      const capturesElement = document.getElementById("captures");
+      capturesElement.appendChild(captureElement);
+    }
+
+    function reset() {
+      clearInterval(timerId);
+      seconds = 0;
+      document.getElementById("timer").textContent = "00:00:00";
+      document.getElementById("captures").innerHTML = "";
+    }
+  </script>
+</body>
+</html>
